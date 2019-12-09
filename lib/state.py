@@ -3,7 +3,7 @@ import argparse
 
 def load_status_parser():
   status_parser = argparse.ArgumentParser()
-  status_parser.add_argument("-m", "--mode", default='Simple', type=str, choices=['simple','all', 'proteins', 'sequences'], help="what to report status about")  
+  status_parser.add_argument("mode", type=str, choices=['simple','all', 'proteins', 'sequences'], help="what to report status about")  
   return status_parser
 
 
@@ -17,6 +17,9 @@ class MutatixState() :
     self.mutation_sequence = None
     self.mutation_protein = None
     self.source_sequence_id = None
+    self.source_protein_filename = None
+    self.both_proteins_filename = None
+    self.mutated_protein_filename = None
 
   def report(self, args):
     log = self.printer.log
@@ -56,6 +59,3 @@ class MutatixState() :
 
   def can_mutate(self):
     return self.source_sequence and self.source_protein
-
-
-

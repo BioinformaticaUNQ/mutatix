@@ -1,6 +1,5 @@
 import argparse
 import time
-from .utils import print_progress_bar
 
 def load_image_parser():
   parser = argparse.ArgumentParser(description = "command to export image files and to view them")
