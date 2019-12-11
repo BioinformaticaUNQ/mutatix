@@ -3,11 +3,16 @@
 import cmd2
 import cmd2.ansi
 
+import argparse
+
 from lib import command_load_fasta
 from lib import mutations
 from lib.image import load_image_parser, image_command
 from lib.state import MutatixState, load_status_parser
 from lib.printer import MutatixPrinter
+
+from lib.translator import translate as _
+
 
 class Mutatix(cmd2.Cmd):
     
@@ -24,7 +29,8 @@ class Mutatix(cmd2.Cmd):
 
     self.do_shell('service nginx start')
     
-    self._init_remove_unwanted_commands()
+    self._init_remove_unwanted_commands()     
+    
 
 
   def _soft_reset(self):
@@ -72,8 +78,11 @@ class Mutatix(cmd2.Cmd):
     """ """
     self.state.report(args)
 
+
+  reset_parser = argparse.ArgumentParser(description=_("app.cmd.reset.description"))
+  @cmd2.with_argparser(reset_parser)
   def do_reset(self, _):
-    """ wipe out all stored info in mutatix status """
+    """ """
     self._soft_reset()
 
   @cmd2.with_argparser(load_image_parser())
@@ -93,7 +102,8 @@ class Mutatix(cmd2.Cmd):
     
 
 if __name__ == '__main__':
-  import sys  
+  import sys
+
   mutatix = Mutatix()
   sys_exit_code = mutatix.cmdloop()
   print('Exiting with code: {!r}'.format(sys_exit_code))

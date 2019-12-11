@@ -1,0 +1,53 @@
+es:
+  cmd: 
+    mutate:
+      description: command to mutate previous dna input
+      iterations: iterations to mutate
+      score: minimun score to achieve using pairwise2 alignments
+      probability: base probability in Jukes-Cantor model
+      model: model to use on mutations
+      stop_codon: whether to use to_stop = True at translation time
+    reset:
+      description: wipe out all stored info in mutatix status
+    status:
+      description: report/show several info stored in mutatix state
+      mode: what to show in report
+    image:
+      description: command to export image files and to view them
+      export: command to manage exporting of proteins images
+      alignment: alignment type
+      view: command to manage visualization of exported images
+    fasta:
+      description: command to load a sequence in a fasta file 
+      number: which sequence from fasta file is the one desired
+      separator: description separator, if any
+      starting_index: subsequence start index
+      ending_index: subsequence end index
+      fasta: fasta file to read from disk
+  error: 
+    mutate:
+      cant_mutate: cant initiate mutation, missing original sequence. Already loaded fasta ?
+    image:
+      cant_visualize: no images loaded, have you run image export already?
+    fasta: 
+      cant_read: error reading file
+      cant_read_refer: refer
+  guide:
+    image:
+      visualize:
+        header: to visualize generated images go to
+        source: source sequence as image
+        mutated: mutated sequence as image
+        both: both aligned sequences as image
+    fasta:
+      none_of_above: none of the above
+      select: select id candidate
+    status:
+      report_title : status report
+      source_protein : source protein sequence
+      mutated_protein : mutated protein sequence
+      alignment : pairwise2 alignment
+      source_sequence_id: source sequence id
+      source_sequence: source sequence
+      mutation_sequence: mutated sequence
+

@@ -1,14 +1,16 @@
 import argparse
 import time
 
+from .translator import translate as _
+
 def load_image_parser():
-  parser = argparse.ArgumentParser(description = "command to export image files and to view them")
+  parser = argparse.ArgumentParser(description = _("app.cmd.image.description"))
   subparsers = parser.add_subparsers(dest="subcommand")
 
-  parser_export = subparsers.add_parser('export', help='command to manage exporting of proteins images')
-  parser_export.add_argument("alignment", default='align', type=str, choices=['align','super', 'cealign'], help="alignment type")
+  parser_export = subparsers.add_parser('export', help=_("app.cmd.image.export"))
+  parser_export.add_argument("alignment", default='align', type=str, choices=['align','super', 'cealign'], help=_("app.cmd.image.alignment"))
   
-  parser_show = subparsers.add_parser('view', help='command to manage visualization of exported images')
+  parser_show = subparsers.add_parser('view', help=_("app.cmd.image.view"))
 
   return parser
 
@@ -45,14 +47,14 @@ class View(Image):
   def _do(self):
     log = self.printer.log
     if self.state.source_protein_filename and self.state.mutated_protein_filename and self.state.both_proteins_filename:
-      log('to visualize generated images go to:')
+      log(f'{_("app.guide.image.visualize.header")}:')
       url = 'localhost'
-      log(f' * source sequence in image        : http://{url}:8080/{self.state.source_protein_filename}.png') 
-      log(f' * mutated sequence in image       : http://{url}:8080/{self.state.mutated_protein_filename}.png') 
-      log(f' * both aligned sequences in image : http://{url}:8080/{self.state.both_proteins_filename}.png') 
+      log(f' * {_("app.guide.image.visualize.source")  } : http://{url}:8080/{self.state.source_protein_filename}.png') 
+      log(f' * {_("app.guide.image.visualize.mutated") } : http://{url}:8080/{self.state.mutated_protein_filename}.png') 
+      log(f' * {_("app.guide.image.visualize.both")    } : http://{url}:8080/{self.state.both_proteins_filename}.png') 
 
     else :
-      log('no images loaded, have you run image export already?')
+      log(_("app.error.image.cant_visualize"))
 
 class Export(Image):
   def __init__(self, handler, state, printer, args):

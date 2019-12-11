@@ -15,6 +15,7 @@ run DEBIAN_FRONTEND=noninteractive apt install pymol -y
 run apt install nginx -y
 
 run pip3 install cmd2 biopython
+run pip3 install python-i18n[YAML]
 
 copy docker/nginx.conf /etc/nginx/sites-enabled/default
 

@@ -5,13 +5,15 @@ from Bio.Alphabet import IUPAC
 from Bio import pairwise2
 from Bio.pairwise2 import format_alignment
 
+from .translator import translate as _
+
 def load_mutation_parser():
-  mutation_parser = argparse.ArgumentParser(description="command to do mutations over source sequence")
-  mutation_parser.add_argument("-i", "--iterations",type=int, default=1, help="iterations to mutate")
-  mutation_parser.add_argument("-s", "--score",type=int, default=10, help="minimun score to achieve using pairwise2 alignments")
-  mutation_parser.add_argument("-p", "--probability", default=0.2, type=float, help="base probability in Jukes-Cantor model")
-  mutation_parser.add_argument("-m", "--model", default='JukesCantor', type=str, choices=['JukesCantor'], help="model to use on mutations")  
-  mutation_parser.add_argument("-c", "--stop-codon", default='False', type=bool, help="whether to use to_stop = True at translation time")  
+  mutation_parser = argparse.ArgumentParser(description=_("app.cmd.mutate.description"))
+  mutation_parser.add_argument("-i", "--iterations",type=int, default=1, help=_("app.cmd.mutate.iterations"))
+  mutation_parser.add_argument("-s", "--score",type=int, default=10, help=_("app.cmd.mutate.score"))
+  mutation_parser.add_argument("-p", "--probability", default=0.2, type=float, help=_("app.cmd.mutate.probability"))
+  mutation_parser.add_argument("-m", "--model", default='JukesCantor', type=str, choices=['JukesCantor'], help=_("app.cmd.mutate.model"))  
+  mutation_parser.add_argument("-c", "--stop-codon", default='False', type=bool, help=_("app.cmd.mutate.stop_codon"))  
   return mutation_parser
 
 def mutate(state, printer, args):
@@ -44,15 +46,7 @@ def mutate(state, printer, args):
     printer.debug(f'{format_alignment(*alignment)}')
     
   else : 
-    printer.log('cant initiate mutation, missing original sequence. Already tried loading fasta ?')
-
-
-
-
-
-
-
-
+    printer.log(_("app.error.mutate.cant_mutate"))
 
 class MutationModel():
   def __init__(self,sequence):

@@ -1,0 +1,53 @@
+es:
+  cmd: 
+    mutate:
+      description: comando para mutar adn previamente cargado
+      iterations: iteraciones en la mutacion
+      score: puntaje minimo para alcanzar durante la mutacion (sino, reintenta)
+      probability: probabilidad base para algoritmo Jukes-Cantor
+      model: Modelo con el cual se muta
+      stop_codon: Utilizar stop codon para frenar el reconocimiento de la proteina
+    reset:
+      description: borra el estado actual y genera uno vacio
+    status:
+      description: reporta/muestra el estado actual de Mutatix
+      mode: que mostrar en el reporte
+    image:
+      description: comando para exportar o mostrar imagenes generadas
+      export: comando para manejar la exportacion de imagenes generadas
+      alignment: tipo de alineamiento a utilizar
+      view: comando para visualizar las imagenes generadas
+    fasta:
+      description: comando para cargar un archivo fasta
+      number: indica la secuencia a utilizar del archivo fasta
+      separator: separador de descripcion, si lo hay
+      starting_index: indice donde empieza la muestra
+      ending_index: indice donde termina la muestra
+      fasta: archivo fasta a leer 
+  error: 
+    mutate:
+      cant_mutate: No se puede iniciar la mutacion, se requiere secuencia original. Ya cargo fasta?
+    image:
+      cant_visualize: No hay imagenes cargadas para visualizar. Ya exporto ? 
+    fasta: 
+      cant_read: Error leyendo archivo fasta
+      cant_read_refer: ver
+  guide:
+    image:
+      visualize:
+        header: para visualizar las imagenes ir a
+        source: secuencia origen
+        mutated: secuencia mutada
+        both: ambas sequencias alineadas
+    fasta:
+      none_of_above: ninguna de las anteriores
+      select: seleccione candidato a identificador
+    status:
+      report_title : Reporte del Estado de Mutatix
+      source_protein : Secuencia de proteina de origen
+      mutated_protein : Secuencia de proteina mutada
+      alignment : Alineamiento pairwise2
+      source_sequence_id: Id de sequencia origen
+      source_sequence: Secuencia origen
+      mutation_sequence: Secuencia mutada
+
