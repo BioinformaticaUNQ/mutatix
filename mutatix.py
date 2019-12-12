@@ -29,9 +29,7 @@ class Mutatix(cmd2.Cmd):
 
     self.do_shell('service nginx start')
     
-    self._init_remove_unwanted_commands()     
-    
-
+    self._init_remove_unwanted_commands()
 
   def _soft_reset(self):
     self.state = MutatixState(self.printer)
@@ -98,7 +96,7 @@ class Mutatix(cmd2.Cmd):
   @cmd2.with_argparser(mutations.load_mutation_parser())
   def do_mutate(self, args):
     """ """
-    mutations.mutate(self.state, self.printer, args)
+    mutations.mutate(self, self.state, self.printer, args)
     
 
 if __name__ == '__main__':

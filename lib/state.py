@@ -57,11 +57,11 @@ class MutatixState() :
   def _dna_report(self, args):
     log = self.printer.log
     if self.source_sequence_id :
-      log(f'{_("app.guide.status.source_sequence_id")} : {self.mutation_sequence.seq}')
+      log(f'{_("app.guide.status.source_sequence_id")} : {self.source_sequence_id}')
     if self.source_sequence :
-      log(f'{_("app.guide.status.source_sequence")} : {self.source_sequence_id}')
+      log(f'{_("app.guide.status.source_sequence")} : {self.source_sequence.seq}')
     if self.mutation_sequence :
-      log(f'{_("app.guide.status.mutation_sequence")} : {self.source_sequence.seq}')
+      log(f'{_("app.guide.status.mutation_sequence")} : {self.mutation_sequence.seq}')
         
 
   def _simple_report(self, args):
