@@ -29,6 +29,7 @@ es:
       cant_mutate: No se puede iniciar la mutacion, se requiere secuencia original. Ya cargo fasta?
     image:
       cant_visualize: No hay imagenes cargadas para visualizar. Ya exporto ? 
+      cant_export: No se puede iniciar la mutacion, se requiere secuencia original y mutada.
     fasta: 
       cant_read: Error leyendo archivo fasta
       cant_read_refer: ver

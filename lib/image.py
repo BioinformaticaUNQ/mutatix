@@ -72,7 +72,11 @@ class Export(Image):
     return f"pymol -Qcd 'fab {source_protein_sequence}; fab {mutated_protein_sequence}; super obj01, obj02; show sticks, all; disable obj02; zoom; png {self.state.source_protein_filename}, width={width}, height={height}, dpi={dpi}, ray=1; enable obj02; disable obj01; zoom; png {self.state.mutated_protein_filename}, width={width}, height={height} , dpi={dpi}, ray=1; enable obj01; zoom; png {self.state.both_proteins_filename}, width={width}, height={height} , dpi={dpi}, ray=1'"
 
   def _do(self):
-    command = self._get_command()
-    self.printer.debug(command)
-    self.handler.do_shell(command)
+    log = self.printer.log
+    if self.state.source_protein and self.state.mutation_protein :
+      command = self._get_command()
+      self.printer.debug(command)
+      self.handler.do_shell(command)
+    else : 
+      log(_("app.error.image.cant_export"))
     

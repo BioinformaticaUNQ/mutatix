@@ -27,6 +27,6 @@ copy . .
 run ln -s /usr/src/images/ /var/www
 
 # entrypoint service nginx start
-cmd service nginx start ; python3 mutatix.py
+cmd python3 mutatix.py
 
 

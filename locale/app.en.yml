@@ -29,6 +29,7 @@ es:
       cant_mutate: cant initiate mutation, missing original sequence. Already loaded fasta ?
     image:
       cant_visualize: no images loaded, have you run image export already?
+      cant_export: cant initiate export, missing original and mutated sequence.
     fasta: 
       cant_read: error reading file
       cant_read_refer: refer
