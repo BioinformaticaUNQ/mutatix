@@ -17,6 +17,7 @@ class MutatixState() :
     self.start_end_sequence = None
     self.source_sequence = None
     self.source_protein = None
+    self.maybe_pdb_id = None
     self.mutation_sequence = None
     self.mutation_protein = None
     self.source_sequence_id = None
@@ -77,12 +78,13 @@ class MutatixState() :
     self._proteins_report(args)
 
 
-  def set_up_read_sequence(self, read, sequence, protein, start,end, maybe_id):
+  def set_up_read_sequence(self, read, sequence, protein, start,end, maybe_id, maybe_pdb_id):
     self.read_sequence = read
     self.source_sequence = sequence
     self.start_end_sequence = (start, end)
     self.source_sequence_id = maybe_id
     self.source_protein = protein
+    self.pdb_id = maybe_pdb_id
 
   def can_mutate(self):
     return self.source_sequence and self.source_protein

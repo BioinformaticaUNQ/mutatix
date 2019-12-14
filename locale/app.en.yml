@@ -43,6 +43,9 @@ es:
     fasta:
       none_of_above: none of the above
       select: select id candidate
+      id_lookup: 
+        start: looking for pdb ids from selected id
+        found_select: the following pdbs have been found. Select one
     status:
       report_title : status report
       source_protein : source protein sequence

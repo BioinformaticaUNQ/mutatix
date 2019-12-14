@@ -13,12 +13,20 @@ run apt update
 run apt install python3 python3-pip -y 
 run DEBIAN_FRONTEND=noninteractive apt install pymol -y
 run apt install nginx -y
+run apt install vim -y
+run apt install wget -y
 
 run pip3 install cmd2 biopython
 run pip3 install python-i18n[YAML]
 
 copy docker/nginx.conf /etc/nginx/sites-enabled/default
 
+run wget https://salilab.org/modeller/9.23/modeller_9.23-1_amd64.deb
+run dpkg -i modeller_9.23-1_amd64.deb
+run rm modeller_9.23-1_amd64.deb
+
+arg modeller_license 
+run sed -i "s/xxx/$modeller_license/g" /usr/lib/modeller9.23/modlib/modeller/config.py
 
 workdir /usr/src
 

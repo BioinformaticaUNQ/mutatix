@@ -43,6 +43,9 @@ es:
     fasta:
       none_of_above: ninguna de las anteriores
       select: seleccione candidato a identificador
+      id_lookup: 
+        start: buscando pdbs a partir del id seleccionado
+        found_select: los siguientes pdbs han sido encontrados. Indicar el correcto.
     status:
       report_title : Reporte del Estado de Mutatix
       source_protein : Secuencia de proteina de origen

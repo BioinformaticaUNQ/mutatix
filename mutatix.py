@@ -5,7 +5,7 @@ import cmd2.ansi
 
 import argparse
 
-from lib import command_load_fasta
+from lib import load_fasta
 from lib import mutations
 from lib.image import load_image_parser, image_command
 from lib.state import MutatixState, load_status_parser
@@ -88,10 +88,10 @@ class Mutatix(cmd2.Cmd):
     """ """
     image_command(self, self.state, self.printer, args )
 
-  @cmd2.with_argparser(command_load_fasta.load_fasta_parser())
+  @cmd2.with_argparser(load_fasta.load_fasta_parser())
   def do_load_fasta(self, args):
     """ """
-    command_load_fasta.load_fasta(self, self.printer, self.state, args)
+    load_fasta.load_fasta(self, self, self.printer, self.state, args)
   
   @cmd2.with_argparser(mutations.load_mutation_parser())
   def do_mutate(self, args):
