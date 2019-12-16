@@ -2,6 +2,8 @@ import argparse
 from Bio import SeqIO
 from Bio.Alphabet import IUPAC
 
+import shutil
+import os.path
 import requests
 import re
 
@@ -19,6 +21,7 @@ def load_fasta_parser():
 def load_fasta(handler, input_handler, printer, state, args):
   maybe_id = None
   maybe_pdb_id = None
+  maybe_pdb_file_name = None
   try:
 
     read_sequence = list(SeqIO.parse(args.fasta, "fasta", alphabet=IUPAC.unambiguous_dna))[args.n]
@@ -36,13 +39,30 @@ def load_fasta(handler, input_handler, printer, state, args):
       maybe_id = ask_id_info(input_handler, printer, read_sequence, args.separator)
       maybe_pdb_id = lookup_id_pdb_info(maybe_id, input_handler, printer)
 
+    if maybe_pdb_id:
+      maybe_pdb_file_name = fetch_pdb_file(handler, maybe_pdb_id, printer)
+
 
     protein = sequence.translate(to_stop = True)
 
-    state.set_up_read_sequence(read_sequence, sequence, protein, starting_index, ending_index, maybe_id, maybe_pdb_id)
-        
+    state.set_up_read_sequence(read_sequence, sequence, protein, starting_index, ending_index, maybe_id, maybe_pdb_id, maybe_pdb_file_name)
+
   except:
     printer.error(lambda err : f'{_("app.error.fasta.cant_read")} {args.fasta}, {_("app.error.fasta.cant_read_refer")}: {err[0]} {err[1]}')
+
+def fetch_pdb_file(handler, pdb_id, printer):
+  filename = None
+  printer.log(_("app.guide.fasta.pdb_lookup.start"))
+  handler.do_shell(f"pymol -Qcd 'set fetch_path, /usr/src/pdb; fetch {pdb_id}, type=pdb, async=0'")
+  path = f"/usr/src/pdb/{pdb_id}.pdb"
+  if os.path.exists(path):
+    printer.log(_("app.guide.fasta.pdb_lookup.found"))
+    shutil.copyfile(path, f"/usr/src/pdb/mutated_{pdb_id}.pdb")
+    filename = path
+  else:
+    printer.log(_("app.guide.fasta.pdb_lookup.not_found"))
+  return filename
+
 
 def ask_id_info(input_handler, printer, sequence, separator):
   options = [i for i in sequence.description.split(separator) if i != '' ]
@@ -51,18 +71,18 @@ def ask_id_info(input_handler, printer, sequence, separator):
 def lookup_id_pdb_info(maybe_id, input_handler, printer):
   selected = None
   if maybe_id:
-    printer.log(_("app.guide.id_lookup.start"))
+    printer.log(_("app.guide.fasta.id_lookup.start"))
     response = requests.get(f'https://www.uniprot.org/uniprot/?query={maybe_id}&format=tab&columns=database%28PDB%29')
     if response.status_code == 200:
       match = re.search('((\w|\d)+\;)+', response.text)[0]
-      options = [i for i in match.split(';') if i != '']
+      options = [i.lower() for i in match.split(';') if i != '']
       printer.debug(options)
-      selected = input_for_list(input_handler, printer, options, _("app.guide.id_lookup.found_select"))
+      selected = input_for_list(input_handler, printer, options, _("app.guide.fasta.id_lookup.found_select"))
       printer.debug(selected)
   return selected
 
 
-def input_for_list(input_handler, printer, list_options, header, text, include_none = True):
+def input_for_list(input_handler, printer, list_options, text, include_none = True):
   options_number = [i+1 for i in range(len(list_options) + (1 if include_none else 0))]
   options_show = list_options + ([_("app.guide.fasta.none_of_above")] if include_none else [] )
   iterator = zip(options_number, options_show)

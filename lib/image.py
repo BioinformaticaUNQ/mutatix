@@ -10,7 +10,9 @@ def load_image_parser():
   parser_export = subparsers.add_parser('export', help=_("app.cmd.image.export"))
   parser_export.add_argument("alignment", default='align', type=str, choices=['align','super', 'cealign'], help=_("app.cmd.image.alignment"))
   
-  parser_show = subparsers.add_parser('view', help=_("app.cmd.image.view"))
+  subparsers.add_parser('view', help=_("app.cmd.image.view"))
+  
+  subparsers.add_parser('html', help=_("app.cmd.image.html"))
 
   return parser
 
@@ -18,7 +20,8 @@ def load_image_parser():
 def image_command(handler, state, printer, args):
   instancer = {
     'view'   : View,
-    'export' : Export
+    'export' : Export,
+    'html'   : Html
   }
 
   instance = instancer[args.subcommand](handler, state, printer, args)
@@ -38,6 +41,21 @@ class Image:
 
   def _do(self):
     pass
+
+class Html(Image):
+  def __init__(self, handler, state, printer, args):
+    super().__init__(handler, state, printer, args)
+
+  def _do(self):
+    log = self.printer.log
+    if self.state.pdb_file_name :
+      url = 'localhost'
+      if self.state.pdb_mutation :
+        log(f' * {_("app.guide.image.html.both") } : http://{url}:8080/html/index.html?pdb_1={self.state.pdb_id}&pdb_2=mutated_{self.state.pdb_id}') 
+      log(f' * {_("app.guide.image.html.source") } : http://{url}:8080/html/index.html?pdb_1={self.state.pdb_id}') 
+
+    else:
+      log(_("app.error.image.cant_html"))
 
 
 class View(Image):

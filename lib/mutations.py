@@ -1,55 +1,79 @@
 import argparse
 from random import random, choice, seed
 from Bio.Seq import Seq 
-from Bio.Alphabet import IUPAC
+from Bio.Alphabet import IUPAC, ThreeLetterProtein
 from Bio import pairwise2
 from Bio.pairwise2 import format_alignment
 
 from .translator import translate as _
+from .modeller_mutation import mutate_by_residue_pos
 
 def load_mutation_parser():
-  mutation_parser = argparse.ArgumentParser(description=_("app.cmd.mutate.description"))
-  mutation_parser.add_argument("-i", "--iterations",type=int, default=1, help=_("app.cmd.mutate.iterations"))
-  mutation_parser.add_argument("-s", "--score",type=int, default=10, help=_("app.cmd.mutate.score"))
-  mutation_parser.add_argument("-p", "--probability", default=0.2, type=float, help=_("app.cmd.mutate.probability"))
-  mutation_parser.add_argument("-m", "--model", default='JukesCantor', type=str, choices=['JukesCantor', 'manual'], help=_("app.cmd.mutate.model"))  
-  mutation_parser.add_argument("-c", "--stop-codon", default='False', type=bool, help=_("app.cmd.mutate.stop_codon"))  
-  return mutation_parser
+
+  three_letter_proteins = [ l.upper() for l in ThreeLetterProtein.letters ]
+  
+  parser = argparse.ArgumentParser()
+  subparsers = parser.add_subparsers(dest="subcommand")
+
+  parser_terminal = subparsers.add_parser('terminal', description=_("app.cmd.mutate.terminal.description"))
+  parser_terminal.add_argument("-i", "--iterations",type=int, default=1, help=_("app.cmd.mutate.terminal.iterations"))
+  parser_terminal.add_argument("-s", "--score",type=int, default=10, help=_("app.cmd.mutate.terminal.score"))
+  parser_terminal.add_argument("-p", "--probability", default=0.2, type=float, help=_("app.cmd.mutate.terminal.probability"))
+  parser_terminal.add_argument("-m", "--model", default='JukesCantor', type=str, choices=['JukesCantor', 'manual'], help=_("app.cmd.mutate.terminal.model"))  
+  parser_terminal.add_argument("-c", "--stop-codon", default='False', type=bool, help=_("app.cmd.mutate.terminal.stop_codon"))
+  
+  parser_modeller = subparsers.add_parser('modeller', description=_("app.cmd.mutate.modeller.help"))
+  parser_modeller.add_argument("position", type=int, help=_("app.cmd.mutate.modeller.position"))
+  parser_modeller.add_argument("residue", type=str, choices=three_letter_proteins, help=_("app.cmd.mutate.modeller.residue"))
+  parser_modeller.add_argument("-c", "--chain", default='', type=str, help=_("app.cmd.mutate.modeller.chain"))
+
+  return parser
 
 def mutate(handler, state, printer, args):
+  # if state.can_mutate(args):
 
-  if state.can_mutate():
-    models = { 
-      'JukesCantor' : lambda args, sequence: JukesCantor(sequence, args.probability, args.iterations),
-      'manual' : lambda _, sequence : Manual(sequence, handler),
-      'Kimura80' : lambda args : None 
+    subcommands = {
+      'terminal' : terminal_mutate,
+      'modeller' : modeller_mutate
     }
 
-
-
-    score = args.score
-    obtained_score = 0
-
-    while obtained_score < score:
-
-      original_sequence = state.source_sequence
-      model = models[args.model](args, original_sequence)
-      mutation_sequence = model.mutate()
-
-      mutation_protein = mutation_sequence.translate(to_stop = args.stop_codon)
-
-      alignment = pairwise2.align.globalxx(state.source_protein.seq, mutation_protein, one_alignment_only = True)[0]
-
-      obtained_score = alignment[2] if args.model != 'manual' else args.score
-
-    state.mutation_protein = mutation_protein
-    state.mutation_sequence = mutation_sequence
-    state.alignment = alignment
-    # printer.debug(f' original sequence:\n {original_sequence.seq}\n mutated sequence:\n {mutation_sequence}')
-    printer.debug(f'{format_alignment(*alignment)}')
+    subcommands[args.subcommand](handler, state, printer, args)
     
-  else : 
-    printer.log(_("app.error.mutate.cant_mutate"))
+  # else : 
+    # printer.log(_("app.error.mutate.cant_mutate"))
+
+def modeller_mutate(handler, state, printer, args):
+  printer.debug(args)
+  try:
+    mutate_by_residue_pos(f'mutated_{state.pdb_id}', args.position, args.residue, args.chain, f'/usr/src/pdb/mutated_{state.pdb_id}.pdb')
+    state.pdb_mutation_done()
+    printer.log(_('app.guide.mutate.modeller.finished'))
+  except KeyError:
+    printer.log(_('app.error.mutate.cant_modeller'))
+
+def terminal_mutate(handler, state, printer, args):
+
+  models = { 
+    'JukesCantor' : lambda args, sequence: JukesCantor(sequence, args.probability, args.iterations),
+    'manual' : lambda _, sequence : Manual(sequence, handler),
+    'Kimura80' : lambda args : None 
+  }
+  score = args.score
+  obtained_score = 0
+  original_sequence = state.source_sequence
+  model = models[args.model](args, original_sequence)
+
+  while obtained_score < score:
+    mutation_sequence = model.mutate()
+    mutation_protein = mutation_sequence.translate(to_stop = args.stop_codon)
+    alignment = pairwise2.align.globalxx(state.source_protein.seq, mutation_protein, one_alignment_only = True)[0]
+    obtained_score = alignment[2] if args.model != 'manual' else args.score
+
+  state.mutation_protein = mutation_protein
+  state.mutation_sequence = mutation_sequence
+  state.alignment = alignment
+  # printer.debug(f' original sequence:\n {original_sequence.seq}\n mutated sequence:\n {mutation_sequence}')
+  printer.debug(f'{format_alignment(*alignment)}')
 
 class MutationModel():
   def __init__(self,sequence):

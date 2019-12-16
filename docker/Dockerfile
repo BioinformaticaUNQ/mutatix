@@ -18,8 +18,7 @@ run apt install wget -y
 
 run pip3 install cmd2 biopython
 run pip3 install python-i18n[YAML]
-
-copy docker/nginx.conf /etc/nginx/sites-enabled/default
+run pip3 install requests
 
 run wget https://salilab.org/modeller/9.23/modeller_9.23-1_amd64.deb
 run dpkg -i modeller_9.23-1_amd64.deb
@@ -30,9 +29,15 @@ run sed -i "s/xxx/$modeller_license/g" /usr/lib/modeller9.23/modlib/modeller/con
 
 workdir /usr/src
 
+copy docker/nginx.conf /etc/nginx/sites-enabled/default
+
+run rm -rf /var/www/html 
+
 copy . . 
 
 run ln -s /usr/src/images/ /var/www
+run ln -s /usr/src/pdb/ /var/www
+run ln -s /usr/src/html/ /var/www
 
 # entrypoint service nginx start
 cmd python3 mutatix.py

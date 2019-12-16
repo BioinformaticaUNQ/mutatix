@@ -1,18 +1,25 @@
 es:
   cmd: 
     mutate:
-      description: command to mutate previous dna input
-      iterations: iterations to mutate
-      score: minimun score to achieve using pairwise2 alignments
-      probability: base probability in Jukes-Cantor model
-      model: model to use on mutations
-      stop_codon: whether to use to_stop = True at translation time
+      terminal: 
+        description: command to mutate previous dna input
+        iterations: iterations to mutate
+        score: minimun score to achieve using pairwise2 alignments
+        probability: base probability in Jukes-Cantor model
+        model: model to use on mutations
+        stop_codon: whether to use to_stop = True at translation time
+      modeller: 
+        help: Creates a single in silico point mutation to sidechain type and at residue position input by the user. The conformation of the mutant sidechain is optimized by conjugate gradient and refined using some MD.
+        position: index to mutate protein
+        residue: residue to use instead
+        chain: chain
     reset:
       description: wipe out all stored info in mutatix status
     status:
       description: report/show several info stored in mutatix state
       mode: what to show in report
     image:
+      html: use browser visualizer in html+javascript
       description: command to export image files and to view them
       export: command to manage exporting of proteins images
       alignment: alignment type
@@ -27,14 +34,22 @@ es:
   error: 
     mutate:
       cant_mutate: cant initiate mutation, missing original sequence. Already loaded fasta ?
+      cant_modeller: cant use modeller. Check params position or chain
     image:
       cant_visualize: no images loaded, have you run image export already?
       cant_export: cant initiate export, missing original and mutated sequence.
+      cant_html: cant get pdb data. Have you loaded a fasta file ?
     fasta: 
       cant_read: error reading file
       cant_read_refer: refer
   guide:
+    mutate:
+      modeller:
+        finished: Finished mutation.
     image:
+      html:
+        source: visualize only source protein pdb
+        both: visualize both source and mutated protein pdb
       visualize:
         header: to visualize generated images go to
         source: source sequence as image
@@ -44,8 +59,12 @@ es:
       none_of_above: none of the above
       select: select id candidate
       id_lookup: 
-        start: looking for pdb ids from selected id
+        start: looking for PDB ids from selected id
         found_select: the following pdbs have been found. Select one
+      pdb_lookup:
+        start: looking for PDB associated to selected id
+        found: PDB found. Downloading.
+        not_found: PDB not found.
     status:
       report_title : status report
       source_protein : source protein sequence
@@ -54,4 +73,3 @@ es:
       source_sequence_id: source sequence id
       source_sequence: source sequence
       mutation_sequence: mutated sequence
-

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Mutatix Viewer - NGL</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="css/font-awesome.min.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="subresource" href="css/light.css" />
+  <link rel="subresource" href="css/dark.css" />
+</head>
+<body>
+  <!-- NGL -->
+  <script src="js/lib/ngl.js"></script>
+
+  <!-- UI -->
+  <script src="js/lib/signals.min.js"></script>
+  <script src="js/lib/tether.min.js"></script>
+  <script src="js/lib/colorpicker.min.js"></script>
+  <script src="js/ui/ui.js"></script>
+  <script src="js/ui/ui.extra.js"></script>
+  <script src="js/ui/ui.ngl.js"></script>
+  <script src="js/gui.js"></script>
+
+  <script>
+
+    function getUrlVars() {
+      var vars = {};
+      var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+      });
+      return vars;
+    }
+
+    schemes = ["atomindex","bfactor","chainid","chainindex","chainname","densityfit","electrostatic","element","entityindex","entitytype","geoquality","hydrophobicity","modelindex","moleculetype","occupancy","partialcharge","random","randomcoilindex","residueindex","resname","sstruc"]
+
+    scales = ["OrRd","PuBu","BuPu","Oranges","BuGn","YlOrBr","YlGn","Reds","RdPu","Greens","YlGnBu","Purples","GnBu","Greys","YlOrRd","PuRd","Blues","PuBuGn","Viridis","Spectral","RdYlGn","RdBu","PiYG","PRGn","RdYlBu","BrBG","RdGy","PuOr","Set1","Set2","Set3","Dark2","Paired","Pastel1","Pastel2","Accent","rainbow","rwb"]
+
+    NGL.cssDirectory = "css/"
+
+    var stage
+    document.addEventListener("DOMContentLoaded", function () {
+      stage = new NGL.Stage()
+      NGL.StageWidget(stage)
+  
+      var urlVars = getUrlVars()
+      var pdbKeys = Object.keys(urlVars).filter( x => x.match(/pdb_\d+/))
+      pdbKeys.forEach((key, index) => stage.loadFile('../pdb/'+ urlVars[key] +'.pdb').then( component => {
+        config = { colorScheme : schemes[index], /*colorScheme : schemes[index-1]*/ }
+        component.addRepresentation('licorice', config)
+        component.addRepresentation('cartoon', config)
+        component.addRepresentation('label', config).toggleVisibility()
+        component.addRepresentation('line', config).toggleVisibility()
+        component.addRepresentation('ball+stick', config).toggleVisibility()
+        component.addRepresentation('surface', config).toggleVisibility()
+
+      })
+      )
+
+    })
+  </script>
+</body>
+</html>

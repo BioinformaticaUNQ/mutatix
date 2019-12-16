@@ -1,18 +1,25 @@
 es:
   cmd: 
     mutate:
-      description: comando para mutar adn previamente cargado
-      iterations: iteraciones en la mutacion
-      score: puntaje minimo para alcanzar durante la mutacion (sino, reintenta)
-      probability: probabilidad base para algoritmo Jukes-Cantor
-      model: Modelo con el cual se muta
-      stop_codon: Utilizar stop codon para frenar el reconocimiento de la proteina
+      terminal: 
+        description: comando para mutar adn previamente cargado
+        iterations: iteraciones en la mutacion
+        score: puntaje minimo para alcanzar durante la mutacion (sino, reintenta)
+        probability: probabilidad base para algoritmo Jukes-Cantor
+        model: Modelo con el cual se muta
+        stop_codon: Utilizar stop codon para frenar el reconocimiento de la proteina
+      modeller:
+        help: Creates a single in silico point mutation to sidechain type and at residue position input by the user. The conformation of the mutant sidechain is optimized by conjugate gradient and refined using some MD.
+        position: indice de posicion
+        residue: residuo modificador
+        chain: cadena
     reset:
       description: borra el estado actual y genera uno vacio
     status:
       description: reporta/muestra el estado actual de Mutatix
       mode: que mostrar en el reporte
     image:
+      html: utilizar un navegador para una visualizacion con html + javascript
       description: comando para exportar o mostrar imagenes generadas
       export: comando para manejar la exportacion de imagenes generadas
       alignment: tipo de alineamiento a utilizar
@@ -27,14 +34,22 @@ es:
   error: 
     mutate:
       cant_mutate: No se puede iniciar la mutacion, se requiere secuencia original. Ya cargo fasta?
+      cant_modeller: No se puede utilizar modeller. Verifique posicion de residuo o cadena
     image:
       cant_visualize: No hay imagenes cargadas para visualizar. Ya exporto ? 
       cant_export: No se puede iniciar la mutacion, se requiere secuencia original y mutada.
+      cant_html: no se encuentra informacion de pdb. Ya cargo un fasta? 
     fasta: 
       cant_read: Error leyendo archivo fasta
       cant_read_refer: ver
   guide:
+    mutate:
+      modeller:
+        finished: Finalizada mutacion.
     image:
+      html:
+        source: visualize solo la proteina (pdb)
+        both: visualize tanto la proteina como su mutacion (pdb)
       visualize:
         header: para visualizar las imagenes ir a
         source: secuencia origen
@@ -44,8 +59,12 @@ es:
       none_of_above: ninguna de las anteriores
       select: seleccione candidato a identificador
       id_lookup: 
-        start: buscando pdbs a partir del id seleccionado
+        start: buscando PBDs a partir del id seleccionado
         found_select: los siguientes pdbs han sido encontrados. Indicar el correcto.
+      pdb_lookup:
+        start: buscando archivo PDB de id seleccionado
+        found: se encontro PDB! Descargando.
+        not_found: PDB no encontrado.
     status:
       report_title : Reporte del Estado de Mutatix
       source_protein : Secuencia de proteina de origen
