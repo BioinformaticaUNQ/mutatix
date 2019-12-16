@@ -5,25 +5,26 @@ Mutatix es un software de experimentación simple y visualización de mutaciones
 
 Utiliza:
 
-* Pymol para el dibujado de las imagenes.
-* Nginx para servir las imagenes a un browser.
+* ngl modificado para visualización en html [NGL at github](https://github.com/arose/ngl)
+* Pymol para el dibujado de las imagenes + fetch de pdbs.
+* Nginx como servidor web.
 * Docker para encapsulado de instalación y dependencias.
 * Internacionalización!
+* Se requiere un navegador actualizado para visualizar pdbs
  
 ## Installation
 
-Desde la carpeta principal ejecutar : `docker build -t mutatix -f docker/Dockerfile .`
-
+Desde la carpeta principal ejecutar : `docker build -t mutatix -f docker/Dockerfile . --build-arg modeller_license={LICENCIA AQUI}`
 
 ## Usage
 
-`docker run -v$(pwd)/fasta:/usr/src/fasta -v$(pwd):/usr/src  -it -p8080:80 -eMUTATIX_LOCALE=es mutatix`
+`docker run -v$(pwd)/fasta:/usr/src/fasta -v$(pwd)/pdb:/usr/src/pdb -v$(pwd)/images:/usr/src/images -it -p8080:80 -eMUTATIX_LOCALE=es mutatix`
+`docker run -v$(pwd):/usr/src  -it -p8080:80 -eMUTATIX_LOCALE=es mutatix`
 
 Aclaraciones: 
 
-* `-v$(pwd)/fasta:/usr/src/fasta` indica la carpeta donde compartir los archivos fasta (host, contenedor)
+* `-v$(pwd)/fasta:/usr/src/fasta ... pdb ... images` indica la carpeta donde compartir los archivos fasta (host, contenedor) , pdbs, e imagenes.
 * Opcional : si se dispone del código fuente, para reflejar cambios o mantener el historial del cliente.
-* El puerto 8080 puede ser cualquiera que no esté en uso en la máquina host.
 * La variable de entorno MUTATIX_LOCALE indica el idioma a utilizar: [es, en]
 
 ### Examples
@@ -37,6 +38,15 @@ mutate -m manual
 image export cealign
 
 image view
+```
+
+
+```
+load_fasta  ./fasta/example_1.fasta -s33 -e1856 -f " "
+
+mutate modeller 3 GLN -cA
+
+image html
 ```
 
 
