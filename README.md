@@ -16,17 +16,18 @@ Utiliza:
  
 ## Installation
 
-Desde la carpeta principal ejecutar : `docker build -t mutatix -f docker/Dockerfile . --build-arg modeller_license={LICENCIA AQUI}`
+Desde la carpeta principal ejecutar : `docker build -t mutatix -f docker/Dockerfile . --build-arg modeller_license={LICENCIA_MODELLER_AQUI}`
 
 ## Usage
 
 `docker run -v$(pwd)/fasta:/usr/src/fasta -v$(pwd)/pdb:/usr/src/pdb -v$(pwd)/images:/usr/src/images -it -p8080:80 -eMUTATIX_LOCALE=es mutatix`
+
 `docker run -v$(pwd):/usr/src  -it -p8080:80 -eMUTATIX_LOCALE=es mutatix`
 
 Aclaraciones: 
 
-* `-v$(pwd)/fasta:/usr/src/fasta ... pdb ... images` indica la carpeta donde compartir los archivos fasta (host, contenedor) , pdbs, e imagenes.
-* Opcional : si se dispone del código fuente, para reflejar cambios o mantener el historial del cliente.
+* `-v$(pwd)/fasta:/usr/src/fasta ... pdb ... images` indica la carpeta donde compartir los archivos fasta, pdbs, e imagenes (host, contenedor).
+* Opcional : o puede directamente si se dispone del código fuente, para compartir con el contenedor las 3 carpetas antes mencionadas,, reflejar cambios o mantener el historial del cliente de consola.
 * La variable de entorno MUTATIX_LOCALE indica el idioma a utilizar: [es, en]
 
 ### Examples
