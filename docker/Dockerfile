@@ -28,6 +28,9 @@ arg modeller_license
 run sed -i "s/xxx/$modeller_license/g" /usr/lib/modeller9.23/modlib/modeller/config.py
 
 workdir /usr/src
+run mkdir images
+run mkdir pdb
+run mkdir html
 
 copy docker/nginx.conf /etc/nginx/sites-enabled/default
 
