@@ -5,10 +5,10 @@ Mutatix es un software de experimentación simple y visualización de mutaciones
 
 Utiliza:
 
-
+* request de id uniprot a través de : https://www.uniprot.org/uniprot/?query={pdb_id}&format=tab&columns=database%28PDB%29
 * ngl modificado para visualización en html [NGL at github](https://github.com/arose/ngl)
 * Pymol para el dibujado de las imagenes + fetch de pdbs.
-* [Modeller](https://salilab.org/modeller/)
+* [Modeller](https://salilab.org/modeller/) (requiere licencia)
 * Nginx como servidor web.
 * Docker para encapsulado de instalación y dependencias.
 * Internacionalización!
