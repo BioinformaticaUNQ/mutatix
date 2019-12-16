@@ -9,10 +9,11 @@ es:
         model: Modelo con el cual se muta
         stop_codon: Utilizar stop codon para frenar el reconocimiento de la proteina
       modeller:
-        help: Creates a single in silico point mutation to sidechain type and at residue position input by the user. The conformation of the mutant sidechain is optimized by conjugate gradient and refined using some MD.
+        help: Creates a single in silico point mutation to sidechain type and at residue position input by the user. The conformation of the mutant sidechain is optimized by conjugate gradient and refined using some MD
         position: indice de posicion
         residue: residuo modificador
         chain: cadena
+        explore: explorar residuos de pdb mutado (o inicial si no hubo mutacion)
     reset:
       description: borra el estado actual y genera uno vacio
     status:

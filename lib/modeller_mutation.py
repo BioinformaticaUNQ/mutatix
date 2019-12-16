@@ -58,6 +58,25 @@ def make_restraints(mdl1, aln):
                 spline_on_site=True)
 
 
+def check_pdb(modelname):
+  # log.verbose()
+  modelpath = "/usr/src/pdb/"
+  modelfile = f"{modelpath}{modelname}"
+
+  env = environ(rand_seed=-49837)
+  env.io.hetatm = True
+  env.edat.dynamic_sphere=False
+  env.edat.dynamic_lennard=True
+  env.edat.contact_shell = 4.0
+  env.edat.update_dynamic = 0.39
+  env.libs.topology.read(file='$(LIB)/top_heav.lib')
+
+  env.libs.parameters.read(file='$(LIB)/par.lib')
+  
+  mdl1 = model(env, file=modelfile)
+  return mdl1
+
+
 def mutate_by_residue_pos(modelname, respos_, restyp, chain, outputfile = None):
   respos = str(respos_)
   # log.verbose()

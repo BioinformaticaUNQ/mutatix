@@ -13,6 +13,7 @@ es:
         position: index to mutate protein
         residue: residue to use instead
         chain: chain
+        explore: explore residues in mutated pdb (or source one if mutations have not been done)
     reset:
       description: wipe out all stored info in mutatix status
     status:

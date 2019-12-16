@@ -5,8 +5,10 @@ Mutatix es un software de experimentación simple y visualización de mutaciones
 
 Utiliza:
 
+
 * ngl modificado para visualización en html [NGL at github](https://github.com/arose/ngl)
 * Pymol para el dibujado de las imagenes + fetch de pdbs.
+* [Modeller](https://salilab.org/modeller/)
 * Nginx como servidor web.
 * Docker para encapsulado de instalación y dependencias.
 * Internacionalización!
@@ -44,7 +46,9 @@ image view
 ```
 load_fasta  ./fasta/example_1.fasta -s33 -e1856 -f " "
 
-mutate modeller 3 GLN -cA
+mutate modeller check 
+
+mutate modeller execute 3 GLN -cA
 
 image html
 ```

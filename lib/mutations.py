@@ -6,7 +6,7 @@ from Bio import pairwise2
 from Bio.pairwise2 import format_alignment
 
 from .translator import translate as _
-from .modeller_mutation import mutate_by_residue_pos
+from .modeller_mutation import mutate_by_residue_pos, check_pdb
 
 def load_mutation_parser():
 
@@ -23,14 +23,19 @@ def load_mutation_parser():
   parser_terminal.add_argument("-c", "--stop-codon", default='False', type=bool, help=_("app.cmd.mutate.terminal.stop_codon"))
   
   parser_modeller = subparsers.add_parser('modeller', description=_("app.cmd.mutate.modeller.help"))
-  parser_modeller.add_argument("position", type=int, help=_("app.cmd.mutate.modeller.position"))
-  parser_modeller.add_argument("residue", type=str, choices=three_letter_proteins, help=_("app.cmd.mutate.modeller.residue"))
-  parser_modeller.add_argument("-c", "--chain", default='', type=str, help=_("app.cmd.mutate.modeller.chain"))
+  sub_modeller = parser_modeller.add_subparsers(dest='mode')
+
+  executor = sub_modeller.add_parser('execute')
+  executor.add_argument("position", type=int, help=_("app.cmd.mutate.modeller.position"))
+  executor.add_argument("residue", type=str, choices=three_letter_proteins, help=_("app.cmd.mutate.modeller.residue"))
+  executor.add_argument("-c", "--chain", default='', type=str, help=_("app.cmd.mutate.modeller.chain"))
+
+  sub_modeller.add_parser('check', description=_("app.cmd.mutate.modeller.explore"))
 
   return parser
 
 def mutate(handler, state, printer, args):
-  # if state.can_mutate(args):
+  if state.can_mutate(args):
 
     subcommands = {
       'terminal' : terminal_mutate,
@@ -39,17 +44,24 @@ def mutate(handler, state, printer, args):
 
     subcommands[args.subcommand](handler, state, printer, args)
     
-  # else : 
-    # printer.log(_("app.error.mutate.cant_mutate"))
+  else : 
+    printer.log(_("app.error.mutate.cant_mutate"))
 
 def modeller_mutate(handler, state, printer, args):
   printer.debug(args)
-  try:
-    mutate_by_residue_pos(f'mutated_{state.pdb_id}', args.position, args.residue, args.chain, f'/usr/src/pdb/mutated_{state.pdb_id}.pdb')
-    state.pdb_mutation_done()
-    printer.log(_('app.guide.mutate.modeller.finished'))
-  except KeyError:
-    printer.log(_('app.error.mutate.cant_modeller'))
+  if args.mode == 'check':
+    model = check_pdb(f'mutated_{state.pdb_id}')
+    printer.log(model)
+    for residue in model.residues:
+      printer.log(residue)
+
+  else:
+    try:
+      mutate_by_residue_pos(f'mutated_{state.pdb_id}', args.position, args.residue, args.chain, f'/usr/src/pdb/mutated_{state.pdb_id}.pdb')
+      state.pdb_mutation_done()
+      printer.log(_('app.guide.mutate.modeller.finished'))
+    except KeyError:
+      printer.log(_('app.error.mutate.cant_modeller'))
 
 def terminal_mutate(handler, state, printer, args):
 
