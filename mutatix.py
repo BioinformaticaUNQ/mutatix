@@ -31,6 +31,12 @@ class Mutatix(cmd2.Cmd):
     
     self._init_remove_unwanted_commands()
 
+    self.printer.log('###############################################################################')
+    self.printer.log('Welcome to Mutatix! app by Federico Mieres https://github.com/fmieres/mutatix')
+    self.printer.log('###############################################################################')
+    self.printer.log(_("app.welcome"))
+    
+
   def _soft_reset(self):
     self.state = MutatixState(self.printer)
   

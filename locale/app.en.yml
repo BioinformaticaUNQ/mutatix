@@ -1,4 +1,24 @@
-es:
+en:
+  welcome: "Mutatix is a simple visualization and experimentation tool on mutations over dna sequences. It allowes:
+
+* Load a fasta file with a header and DNA sequences.
+
+* Work mutating that loaded information.
+
+* Visualize it .
+
+The kind of mutations are divided in two modes.
+
+### At sequence level
+
+This mutation can be achieved via two ways. One by running Jukes-Cantor algorithm, the other by manually modifying the sequence. Then an alignment is provided using biopython library pairwise2.
+
+### AT PDB level
+
+If a genebank id is provided at loading fasta time of execution (in the fasta header), the application will ask uniprot for associated pdb ids. With this information, the user can modify the structure residues using a [Modeller](https://salilab.org/modeller/wiki/Mutate%20model) library. 
+
+This can be visualized via web browser and a webapp mounted on the docker container.
+  "
   cmd: 
     mutate:
       terminal: 
@@ -26,9 +46,9 @@ es:
       alignment: alignment type
       view: command to manage visualization of exported images
     fasta:
-      description: command to load a sequence in a fasta file 
-      number: which sequence from fasta file is the one desired
-      separator: description separator, if any
+      description: command to load a sequence in a fasta file (only dna) (a header containing a genebank id is mandatory in order to work with a mutated structrue)
+      number: which sequence from fasta file is the one desired 
+      separator: description separator in fasta header , if any
       starting_index: subsequence start index
       ending_index: subsequence end index
       fasta: fasta file to read from disk

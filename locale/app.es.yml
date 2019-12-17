@@ -1,4 +1,23 @@
 es:
+  welcome: "Mutatix es un software de experimentacion simple y visualizacion de mutaciones sobre sequencias de adn. En simples pasos permite :
+
+* Cargar un archivo fasta con encabezado y secuencia ADN.
+
+* Hacer una mutacion sobre la informacion cargada.
+
+* Visualizarla.
+
+La aplicacion permite al usuario hacer dos tipos de mutaciones:
+
+### A nivel secuencia.
+
+Este tipo de mutacion se realiza de dos formas. Una al azar utilizando el algoritmo Jukes - Cantor o una manual, dada por input del usuario. Luego se realiza automaticamente una alineacion a nivel secuencia utilizando la libreria de bio python pairwise2.
+
+### A nivel PDB.
+
+Si se dispone de un genbank id valido al momento de cargar un fasta. Se intenta buscar un codigo pdb utilizando un servicio de uniprot. Una vez obtenido el pdb la aplicacion permite una mutacion de residuos utilizando una libreria de [Modeller](https://salilab.org/modeller/wiki/Mutate%20model). Este paso se puede realizar n veces hasta alcanzar una estructura deseada. 
+
+Se pueden visualizar ambas estructuras utilizando el navegador y una aplicacion montada en el contenedor de docker."
   cmd: 
     mutate:
       terminal: 
@@ -26,9 +45,9 @@ es:
       alignment: tipo de alineamiento a utilizar
       view: comando para visualizar las imagenes generadas
     fasta:
-      description: comando para cargar un archivo fasta
+      description: comando para cargar un archivo fasta (cadena adn) (el header conteniendo un genebank id valido es necesario si se desea obtener una estructura mutada)
       number: indica la secuencia a utilizar del archivo fasta
-      separator: separador de descripcion, si lo hay
+      separator: separador de descripcion del encabezado del fasta, si lo hay 
       starting_index: indice donde empieza la muestra
       ending_index: indice donde termina la muestra
       fasta: archivo fasta a leer 
