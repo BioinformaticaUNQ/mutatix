@@ -29,17 +29,17 @@ Mutatix is a simple visualization and experimentation tool on mutations over dna
 
 The kind of mutations are divided in two modes.
 
-### At sequence level
+#### At sequence level
 
 This mutation can be achieved via two ways. One by running Jukes-Cantor algorithm, the other by manually modifying the sequence. Then an alignment is provided using biopython library pairwise2.
 
-### AT PDB level
+#### AT PDB level
 
 If a genebank id is provided at loading fasta time of execution (in the fasta header), the application will ask uniprot for associated pdb ids. With this information, the user can modify the structure residues using a [Modeller](https://salilab.org/modeller/wiki/Mutate%20model) library. 
 
 This can be visualized via web browser and a webapp mounted on the docker container.
 
-## Utiliza:
+## Uses:
 
 * request de id uniprot a través de : https://www.uniprot.org/uniprot/?query={pdb_id}&format=tab&columns=database%28PDB%29
 * ngl modificado para visualización en html [NGL at github](https://github.com/arose/ngl)
